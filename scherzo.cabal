@@ -136,6 +136,7 @@ library
     other-modules:
         Alma.Parser.CharTrie,
         Alma.Parser.Config,
+        Alma.Parser.Rules,
         Alma.Parser.TrieLexer,
         Alma.Parser.Type
     hs-source-dirs: lib

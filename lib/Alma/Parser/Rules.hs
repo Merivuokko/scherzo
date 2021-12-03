@@ -1,8 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Alma.Parser
-    (Parser,
-     parseMusic)
+-- | Alma parser rules
+
+module Alma.Parser.Rules
+    (parseMusic)
 where
 
 import Control.Applicative hiding (some)
