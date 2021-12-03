@@ -128,21 +128,24 @@ library
     import: common, megaparsec-dep
     build-depends:
         containers ^>=0.6,
+        dhall ^>=1.40,
         hashable ^>=0.4,
+        mtl ^>=2.2,
         unordered-containers ^>=0.2.15
     exposed-modules:
         Alma.Parser
     other-modules:
         Alma.Parser.CharTrie,
+        Alma.Parser.Config,
+        Alma.Parser.Rules,
         Alma.Parser.TrieLexer,
-        Alma.Parser.Types
+        Alma.Parser.Type
     hs-source-dirs: lib
 
 executable alma2ly
-    import: common, megaparsec-dep, scherzo-dep
+    import: common, scherzo-dep
     main-is: Main.hs
     build-depends:
-        bytestring ^>=0.11,
         scherzo
     hs-source-dirs: src/alma2ly
 
