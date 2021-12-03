@@ -143,10 +143,9 @@ library
     hs-source-dirs: lib
 
 executable alma2ly
-    import: common, megaparsec-dep, scherzo-dep
+    import: common, scherzo-dep
     main-is: Main.hs
     build-depends:
-        bytestring ^>=0.11,
         scherzo
     hs-source-dirs: src/alma2ly
 
