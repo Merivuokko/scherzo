@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- | Alma parser rules
@@ -7,12 +8,14 @@ module Alma.Parser.Rules
 where
 
 import Control.Applicative hiding (some)
-import Control.Monad (void)
+import Control.Monad.Reader
 import Data.Char
 import Data.Text (Text)
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
+import Alma.Parser.Config
+import Alma.Parser.TrieLexer
 import Alma.Parser.Type
 
 -- | Space consumer parser
@@ -34,18 +37,22 @@ partName = takeWhile1P (Just "part name") prd
 partNameList :: Parser [Text]
 partNameList = sepEndBy1 partName skipSpace1
 
-musicLine :: Parser ([Text], Text)
+musicLine :: Parser ([Text], [Text])
 musicLine = do
     ps <- partNameList
     void $! char ':' *> skipSpace1
-    musicExpr <- takeWhile1P (Just "music") isPrint
-    void $! newline
-    pure $! (ps, musicExpr)
+    expr <- musicExpr
+    pure $! (ps, expr)
 
-musicBlock :: Parser [([Text], Text)]
+musicExpr :: Parser [Text]
+musicExpr = do
+    config <- ask
+    manyTill (parseWithTrie config.tokenTrie) newline
+    
+musicBlock :: Parser [([Text], [Text])]
 musicBlock = some musicLine
 
-parseMusic :: Parser [[([Text], Text)]]
+parseMusic :: Parser [[([Text], [Text])]]
 parseMusic = do
     void $! optional skipBlankLines
     sepEndBy1 musicBlock skipBlankLines
