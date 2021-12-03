@@ -11,7 +11,7 @@ import Data.Set qualified as Set
 import Text.Megaparsec
 
 import Alma.Parser.CharTrie as CT
-import Alma.Parser.Types
+import Alma.Parser.Type
 
 parseWithTrie :: forall a. CT.CharTrie a -> Parser a
 {-# INLINEABLE parseWithTrie #-}

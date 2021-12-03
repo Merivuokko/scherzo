@@ -1,6 +1,6 @@
 -- | Types shared between Alma.Parser submodules
 
-module Alma.Parser.Types
+module Alma.Parser.Type
     (Parser)
 where
 

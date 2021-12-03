@@ -12,7 +12,7 @@ import Data.Text (Text)
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
-import Alma.Parser.Types
+import Alma.Parser.Type
 
 -- | Space consumer parser
 skipSpace :: Parser ()
