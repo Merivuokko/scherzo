@@ -130,6 +130,7 @@ library
         containers ^>=0.6,
         dhall ^>=1.40,
         hashable ^>=0.4,
+        mtl ^>=2.2,
         unordered-containers ^>=0.2.15
     exposed-modules:
         Alma.Parser
