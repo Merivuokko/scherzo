@@ -16,4 +16,4 @@ All contributions (code, documentation, ideas) are very welcome. Contributing to
 
 ## Building
 
-Cabal is used to build this package. It currently requires using GHC >= 9.2 as it utilizes the OverloadedRecordDot extension.
+Cabal is used to build this package. It currently requires using GHC >= 9.2 as it utilizes the OverloadedRecordDot extension. Use also need to use head.hackage repository because some dependencies of scherzo are still broken on ghc 9.2.
