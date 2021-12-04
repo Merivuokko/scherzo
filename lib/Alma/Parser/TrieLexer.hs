@@ -6,7 +6,6 @@ where
 
 import Control.Applicative
 import Data.List.NonEmpty qualified as NL
-import Data.List.NonEmpty (NonEmpty (..))
 import Data.Set qualified as Set
 import Text.Megaparsec
 
@@ -17,23 +16,27 @@ parseWithTrie :: forall a. CT.CharTrie a -> Parser a
 {-# INLINEABLE parseWithTrie #-}
 parseWithTrie !trie
     | CT.null trie = error $! "Programming error: Cannot parse with no tokens"
-    | otherwise = go Nothing trie
+    | otherwise = go trie
   where
-    go :: Maybe a -> CT.CharTrie a -> Parser a
+    go :: CT.CharTrie a -> Parser a
     {-# INLINEABLE go #-}
-    go !val !t = do
+    go !t = do
         ch <- lookAhead anySingle
         case CT.lookup ch t of
             Just (nextVal, nextTrie) ->
-                anySingle *> go (nextVal <|> val) nextTrie
+                anySingle *> case nextVal of
+                    Just res ->
+                        try (go nextTrie) <|> (pure $! res)
+                    Nothing ->
+                        go nextTrie
             Nothing ->
-                case val of
-                    Just result -> pure $! result
-                    Nothing -> errorOut ch t
+                errorOut ch t
     errorOut :: Char -> CT.CharTrie a -> Parser a
     {-# INLINEABLE errorOut #-}
+    -- Note:return value of errorOut should be a thunk so that it is not
+    -- evaluated in case parsing succeeded on a previous level of the trie.
     errorOut !ch !t
-        = failure (Just $! Tokens $! ch :| []) expectedTokens
+        = failure (Just $! Tokens $! NL.singleton ch) expectedTokens
       where
         expectedTokens :: Set.Set (ErrorItem Char)
         {-# INLINEABLE expectedTokens #-}
@@ -41,4 +44,6 @@ parseWithTrie !trie
             if CT.null t
             then error $! "Programming error: Dead end in parsing trie"
             else Set.fromList $! map charToErrorItem $! CT.keys t
+        charToErrorItem :: Char -> ErrorItem Char
+        {-# INLINEABLE charToErrorItem #-}
         charToErrorItem !c = Tokens $! NL.singleton c
