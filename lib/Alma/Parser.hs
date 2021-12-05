@@ -2,7 +2,6 @@
 
 module Alma.Parser
     (Parser,
-     ParserConfig,
      readConfigFile,
      testParser)
 where
