@@ -43,7 +43,7 @@ parseWithTrie !trie
         expectedTokens =
             if CT.null t
             then error $! "Programming error: Dead end in parsing trie"
-            else Set.fromList $! map charToErrorItem $! CT.keys t
+            else Set.fromList $! fmap charToErrorItem $! CT.keys t
         charToErrorItem :: Char -> ErrorItem Char
         {-# INLINEABLE charToErrorItem #-}
         charToErrorItem !c = Tokens $! NL.singleton c

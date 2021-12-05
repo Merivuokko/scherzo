@@ -27,7 +27,7 @@ type ParserStrings :: Type
 type ParserStrings = Map.HashMap T.Text T.Text
 
 mapToCharTrie :: ParserStrings -> CT.CharTrie T.Text
-mapToCharTrie = CT.fromList . map swap . Map.toList
+mapToCharTrie = CT.fromList . fmap swap . Map.toList
 
 readConfigFile :: FilePath -> IO ParserConfig
 readConfigFile file = do
