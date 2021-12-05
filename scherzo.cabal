@@ -140,7 +140,8 @@ library
         Alma.Parser.Rules,
         Alma.Parser.TrieLexer,
         Alma.Parser.Type,
-        Alma.Syntax.Config
+        Alma.Syntax.Config,
+        Alma.Syntax.State
     hs-source-dirs: lib
 
 executable alma2ly
