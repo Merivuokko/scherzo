@@ -133,13 +133,14 @@ library
         mtl ^>=2.2,
         unordered-containers ^>=0.2.15
     exposed-modules:
-        Alma.Parser
+        Alma.Parser,
+        Alma.Syntax
     other-modules:
         Alma.Parser.CharTrie,
-        Alma.Parser.Config,
         Alma.Parser.Rules,
         Alma.Parser.TrieLexer,
-        Alma.Parser.Type
+        Alma.Parser.Type,
+        Alma.Syntax.Config
     hs-source-dirs: lib
 
 executable alma2ly

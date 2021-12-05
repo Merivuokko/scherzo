@@ -10,7 +10,7 @@ import Data.Text (Text)
 import Data.Void (Void)
 import Text.Megaparsec (Parsec)
 
-import Alma.Parser.Config
+import Alma.Syntax.Config
 
 type Parser :: Type -> Type
-type Parser = ReaderT ParserConfig (Parsec Void Text)
+type Parser = ReaderT SyntaxConfig (Parsec Void Text)

@@ -7,6 +7,7 @@ where
 import Data.Text.IO qualified as T
 
 import Alma.Parser
+import Alma.Syntax
 
 main :: IO ()
 main = do

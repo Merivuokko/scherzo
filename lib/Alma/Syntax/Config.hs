@@ -4,8 +4,8 @@
 
 -- | Parser configuration management
 
-module Alma.Parser.Config
-    (ParserConfig (..),
+module Alma.Syntax.Config
+    (SyntaxConfig (..),
      readConfigFile)
 where
 
@@ -17,21 +17,21 @@ import Dhall (inputFile, auto)
 
 import Alma.Parser.CharTrie as CT
 
-type ParserConfig :: Type
-data ParserConfig = ParserConfig {
+type SyntaxConfig :: Type
+data SyntaxConfig = SyntaxConfig {
     tokenTrie :: CT.CharTrie T.Text
     }
     deriving stock (Eq, Read, Show)
 
-type ParserStrings :: Type
-type ParserStrings = Map.HashMap T.Text T.Text
+type SyntaxStrings :: Type
+type SyntaxStrings = Map.HashMap T.Text T.Text
 
-mapToCharTrie :: ParserStrings -> CT.CharTrie T.Text
+mapToCharTrie :: SyntaxStrings -> CT.CharTrie T.Text
 mapToCharTrie = CT.fromList . fmap swap . Map.toList
 
-readConfigFile :: FilePath -> IO ParserConfig
+readConfigFile :: FilePath -> IO SyntaxConfig
 readConfigFile file = do
     val <- inputFile auto file
-    pure $! ParserConfig {
+    pure $! SyntaxConfig {
         tokenTrie = mapToCharTrie val
         }

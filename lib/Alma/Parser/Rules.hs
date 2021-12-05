@@ -14,9 +14,9 @@ import Data.Text (Text)
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
-import Alma.Parser.Config
 import Alma.Parser.TrieLexer
 import Alma.Parser.Type
+import Alma.Syntax.Config
 
 -- | Space consumer parser
 skipSpace :: Parser ()
