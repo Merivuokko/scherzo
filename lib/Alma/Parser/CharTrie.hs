@@ -5,6 +5,7 @@ module Alma.Parser.CharTrie
     (CharTrie,
     empty,
     fromList,
+    fromHashMap,
     insert,
     keys,
     lookup,
@@ -47,6 +48,8 @@ fromList :: forall a. [(Text, a)] -> CharTrie a
 fromList [] = empty
 fromList ((key, val) : xs) = insert key val $! fromList xs
 
+fromHashMap :: M.HashMap Text v -> CharTrie v
+fromHashMap = fromList . M.toList
 
 lookup :: forall a. Char -> CharTrie a -> Maybe (Maybe a, CharTrie a)
 lookup !key (CharTrie trie) = M.lookup key trie
