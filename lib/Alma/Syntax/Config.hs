@@ -9,8 +9,8 @@ module Alma.Syntax.Config
     (SyntaxConfig (..),
      TokenMap (map, trie),
      readConfigFile,
-     SStateName,
-     SState,
+     ContextName,
+     ContextDef,
      Command)
 where
 
@@ -23,8 +23,8 @@ import Alma.Parser.CharTrie as CT
 
 type SyntaxConfig :: Type
 data SyntaxConfig = SyntaxConfig {
-    states :: HM.HashMap SStateName SState,
-    initState :: SStateName
+    contexts :: HM.HashMap ContextName ContextDef,
+    initContext :: ContextName
     }
     deriving stock (Eq, Generic, Show)
     deriving anyclass (FromDhall)
@@ -45,11 +45,11 @@ mkTokenMap m = TokenMap m (CT.fromHashMap m)
 readConfigFile :: FilePath -> IO SyntaxConfig
 readConfigFile file = inputFile auto file
 
-type SStateName :: Type
-type SStateName = T.Text
+type ContextName :: Type
+type ContextName = T.Text
 
-type SState :: Type
-data SState = SState {
+type ContextDef :: Type
+data ContextDef = ContextDef {
     init :: Command,
     fail :: Command,
     tokens :: TokenMap Command
@@ -59,8 +59,8 @@ data SState = SState {
                       
 type Command :: Type
 data Command
-    = EnterState SStateName
-    | LeaveState
+    = EnterContext SContextName
+    | LeaveContext
     | Finish
     | Fail
     | Write T.Text
