@@ -1,17 +1,18 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE StrictData #-}
 
 -- | Syntax configuration
 
 module Alma.Syntax.Config
     (SyntaxConfig (..),
-     TokenMap (map, trie),
+     TokenMap (..),
      readConfigFile,
      ContextName,
-     ContextDef,
-     Command)
+    ContextDef(..),
+     Command(..))
 where
 
 import Data.Kind (Type)
@@ -50,19 +51,17 @@ type ContextName = T.Text
 
 type ContextDef :: Type
 data ContextDef = ContextDef {
-    init :: Command,
-    fail :: Command,
-    tokens :: TokenMap Command
+    tokens :: TokenMap [Command]
     }
     deriving stock (Eq, Generic, Show)
     deriving anyclass (FromDhall)
                       
 type Command :: Type
 data Command
-    = EnterContext SContextName
-    | LeaveContext
+    = Enter ContextName
+    | Leave
     | Finish
-    | Fail
+    | Fail T.Text
     | Write T.Text
     deriving stock (Eq, Generic, Ord, Show)
     deriving anyclass (FromDhall)

@@ -47,8 +47,10 @@ common common
         base ^>= { 4.15, 4.16 },
         text ^>=1.2
 
-    default-extensions: NoStarIsType
-    other-extensions: OverloadedStrings
+    default-extensions:
+        BlockArguments,
+        NoStarIsType,
+        OverloadedStrings
     if impl(ghc >= 9.2)
         default-language: GHC2021
     else
@@ -137,6 +139,7 @@ library
         Alma.Syntax
     other-modules:
         Alma.Parser.CharTrie,
+        Alma.Parser.Music,
         Alma.Parser.Rules,
         Alma.Parser.TrieLexer,
         Alma.Parser.Type,
