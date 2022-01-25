@@ -120,7 +120,7 @@ common common
 
 common megaparsec-dep
    build-depends:
-        megaparsec ^>=9
+        megaparsec >=9 && <9.3
 
 common scherzo-dep
     build-depends:
