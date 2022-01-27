@@ -20,4 +20,4 @@ All contributions (code, documentation, ideas) are very welcome. Contributing to
 
 Cabal is used to build this package. It currently requires using GHC >= 9.2 as it utilizes the OverloadedRecordDot extension. You'll also need to use head.hackage repository because some dependencies of scherzo are still broken on ghc 9.2.
 
-See [http://ghc.gitlab.haskell.org/head.hackage/](here) for instructions on how to set up head.hackage repository.
+See [here](http://ghc.gitlab.haskell.org/head.hackage/) for instructions on how to set up head.hackage repository.
