@@ -136,7 +136,8 @@ library
         unordered-containers ^>=0.2.15
     exposed-modules:
         Alma.Parser,
-        Alma.Syntax
+        Alma.Syntax,
+        Scherzo.Music
     other-modules:
         Alma.Parser.CharTrie,
         Alma.Parser.Music,
