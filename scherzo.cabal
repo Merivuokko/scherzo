@@ -130,7 +130,7 @@ library
     import: common, megaparsec-dep
     build-depends:
         containers ^>=0.6,
-        dhall ^>=1.40,
+        dhall ^>=1.41,
         hashable ^>=0.4,
         mtl ^>=2.2,
         unordered-containers ^>=0.2.15
