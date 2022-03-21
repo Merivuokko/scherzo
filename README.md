@@ -14,10 +14,8 @@ Alma is expected to be especially convenient for composers and people using brai
 
 Scherzo is in very early stages of development. It cannot yet be used for anything. There is a working prototype of a configurable Alma music expression parser. The current implementation allows for very flexible music parser building. It is not clear yet if all this flexibility is necessary/desirable, and if it is possible to automatically pretty-print the parsed music back to text using the parser's configuration.
 
-All contributions (code, documentation, ideas) are very welcome. Contributing to will become easier once thre is some basic working functionality.
+All contributions (code, documentation, ideas) are very welcome. Contributing to will become easier once there is some basic working functionality.
 
 ## Building
 
-Cabal is used to build this package. It currently requires using GHC >= 9.2 as it utilizes the OverloadedRecordDot extension. You'll also need to use head.hackage repository because some dependencies of scherzo are still broken on ghc 9.2.
-
-See [here](http://ghc.gitlab.haskell.org/head.hackage/) for instructions on how to set up head.hackage repository.
+Cabal is used to build this package. It currently requires using GHC >= 9.2 as it utilizes the OverloadedRecordDot language extension. Usage of head.hackage repository should not longer be necessary.
