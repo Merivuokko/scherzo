@@ -45,7 +45,7 @@ flag Weverything
 common common
     build-depends:
         base ^>= { 4.15, 4.16 },
-        text >=1.2 && <2.1
+        text ^>=2.0
 
     default-extensions:
         BlockArguments,
