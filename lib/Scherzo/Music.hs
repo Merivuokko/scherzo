@@ -156,8 +156,10 @@ noteLength nd = nd.durationScaling * (baseLength + augment nd.augmentationDots)
     baseLength = valueLength nd.value
 
     augment :: Int -> MusicLength
-    augment 0 = 0
-    augment count = baseLength * (1 % (2 ^ count)) + augment (count - 1)
+    augment dots =
+        let !denominator = 2 ^ dots
+            !numerator = denominator - 1
+        in baseLength * (numerator % denominator)
 
 -- | Calculate music expressiong length in musical time
 -- O(n)
