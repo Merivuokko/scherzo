@@ -35,8 +35,9 @@ module Scherzo.Music (
     -- * Musical time calculation
     MusicLength,
     musicExprLength,
+    valueLength,
     noteLength,
-    valueLength
+    lengthToDuration
     ) where
 
 import Data.Foldable (foldl')
@@ -86,7 +87,7 @@ staffPositionsBetween a b
 type NoteDuration :: Type
 data NoteDuration = NoteDuration {
     value :: NoteValue,
-    augmentationDots :: Int
+    dots :: Int
     } deriving stock (Eq, Show)
 
 -- | Note head types
@@ -103,7 +104,7 @@ data NoteValue = Maxima
                | A64th
                | A128th
                | A256th
-               deriving stock (Eq, Ord, Show)
+               deriving stock (Enum, Eq, Ord, Show)
 
 -- | Musical expression
 type MusicExpr :: Type
@@ -149,16 +150,39 @@ valueLength v
           A256th -> 1 % 256
 
 noteLength :: NoteDuration -> MusicLength
-noteLength nd = baseLength + baseLength * augment nd.augmentationDots
+noteLength nd = baseLength + baseLength * augment nd.dots
   where
     baseLength :: MusicLength
     baseLength = valueLength nd.value
 
     augment :: Int -> MusicLength
     augment dots =
-        let !denominator = 2 ^ dots
-            !numerator = denominator - 1
-        in numerator % denominator
+        let !denom = 2 ^ dots
+            !numer = denom - 1
+        in numer % denom
+
+lengthToDuration :: MusicLength -> Maybe NoteDuration
+lengthToDuration duration
+    = let durationFloat :: Double = realToFrac duration
+          baseLength = floor (logBase 2 durationFloat)
+          filledTime = 2 ** (fromIntegral $! baseLength + 1)
+          dots = (-1) - logBase 2 ((filledTime - durationFloat) / filledTime)
+      in if isInt 10 dots
+         then Just $! NoteDuration {
+                  value = logToValue baseLength,
+                  dots = round $! dots
+                  }
+         else Nothing
+  where
+    -- logToValue works by converting the logarithmic representation to an
+    -- integer representation of the NoteValue type. Therefore the element
+    -- order in NoteValue is significant.
+    logToValue :: Int -> NoteValue
+    logToValue lg = toEnum $! (-1) * lg + 3
+
+    -- Return whether x is an integer to n decimal places
+    isInt :: RealFrac a => Int -> a -> Bool
+    isInt n x = (round (10 ^ n * (x - fromIntegral (round x :: Int))) :: Int) == 0
 
 -- | Calculate music expressiong length in musical time
 -- O(n)
