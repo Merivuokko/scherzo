@@ -86,8 +86,7 @@ staffPositionsBetween a b
 type NoteDuration :: Type
 data NoteDuration = NoteDuration {
     value :: NoteValue,
-    augmentationDots :: Int,
-    durationScaling :: Ratio Int
+    augmentationDots :: Int
     } deriving stock (Eq, Show)
 
 -- | Note head types
@@ -150,7 +149,7 @@ valueLength v
           A256th -> 1 % 256
 
 noteLength :: NoteDuration -> MusicLength
-noteLength nd = nd.durationScaling * (baseLength + augment nd.augmentationDots)
+noteLength nd = baseLength + augment nd.augmentationDots
   where
     baseLength :: MusicLength
     baseLength = valueLength nd.value
