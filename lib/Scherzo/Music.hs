@@ -32,7 +32,7 @@ module Scherzo.Music (
     MusicExpr (..),
     flattenMusic,
 
-    -- * Musicaltime calculation
+    -- * Musical time calculation
     MusicLength,
     musicExprLength,
     noteLength,
@@ -149,7 +149,7 @@ valueLength v
           A256th -> 1 % 256
 
 noteLength :: NoteDuration -> MusicLength
-noteLength nd = baseLength + augment nd.augmentationDots
+noteLength nd = baseLength + baseLength * augment nd.augmentationDots
   where
     baseLength :: MusicLength
     baseLength = valueLength nd.value
@@ -158,7 +158,7 @@ noteLength nd = baseLength + augment nd.augmentationDots
     augment dots =
         let !denominator = 2 ^ dots
             !numerator = denominator - 1
-        in baseLength * (numerator % denominator)
+        in numerator % denominator
 
 -- | Calculate music expressiong length in musical time
 -- O(n)
