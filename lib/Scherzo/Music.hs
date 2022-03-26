@@ -21,13 +21,24 @@ module Scherzo.Music (
     -- * Notes and rests
     Note (..),
     Rest (..),
-    NoteDuration (..),
-    NoteValue (..),
+
+    -- * Note pitch
     PitchClass (..),
-    Octave,
     Alteration (..),
-    Articulation (..),
+    Octave,
+    NotePitch (..),
     staffPositionsBetween,
+
+    -- * Note duration
+    NoteValue (..),
+    NoteDuration (..),
+
+    -- * Expressive marks
+    Articulation (..),
+
+    -- * Music expressions
+    MusicExpr (..),
+    flattenMusic,
 
     -- * Musical time calculation
     MusicLength,
@@ -35,11 +46,7 @@ module Scherzo.Music (
     lengthToValue,
     durationLength,
     lengthToDuration,
-
-    -- * Music expressions
-    MusicExpr (..),
     musicExprLength,
-    flattenMusic
     ) where
 
 import Data.Foldable (foldl')
@@ -47,27 +54,6 @@ import Data.Kind (Type)
 import Data.Map qualified as Map
 import Data.Ratio
 import Numeric.Logarithms
-
--- | Scientific octave number
-type Octave :: Type
-type Octave = Int
-
--- | A musical note
-type Note :: Type
-data Note = Note {
-    pitch :: PitchClass,
-    alteration :: Alteration,
-    octave :: Octave,
-    duration :: NoteDuration,
-    articulations :: [Articulation]
-    } deriving stock (Eq, Show)
-
--- | A musical rest
-type Rest :: Type
-data Rest = Rest {
-    duration :: NoteDuration,
-    articulations :: [Articulation]
-    } deriving stock (Eq, Show)
 
 -- | Pitch class is a set of pitches associated with a musical scale. FOr each pitch class there is a single pitch (frequency) within each octave.
 type PitchClass :: Type
@@ -83,16 +69,21 @@ data Alteration = DoubleFlat
                 | DoubleSharp
                 deriving stock (Eq, Ord, Show)
 
-staffPositionsBetween :: Note -> Note -> Int
+-- | Scientific octave number
+type Octave :: Type
+type Octave = Int
+
+-- | Absolute pitch of a tone
+type NotePitch :: Type
+data NotePitch = NotePitch {
+    pitch :: PitchClass,
+    alteration :: Alteration,
+    octave :: Octave,
+    } deriving stock (Eq, Show)
+
+staffPositionsBetween :: NotePitch -> NotePitch -> Int
 staffPositionsBetween a b
     = (a.octave * 7 + fromEnum a.pitch) - (b.octave * 7 + fromEnum b.pitch)
-
--- | Duration definition of a note or a rest
-type NoteDuration :: Type
-data NoteDuration = NoteDuration {
-    value :: NoteValue,
-    dots :: Int
-    } deriving stock (Eq, Show)
 
 -- | Note head types
 type NoteValue :: Type
@@ -109,6 +100,33 @@ data NoteValue = Maxima
                | A128th
                | A256th
                deriving stock (Bounded, Enum, Eq, Ord, Show)
+
+-- | Duration definition of a note or a rest
+type NoteDuration :: Type
+data NoteDuration = NoteDuration {
+    value :: NoteValue,
+    dots :: Int
+    } deriving stock (Eq, Show)
+
+-- | An articulation event associated with a note or rest
+type Articulation :: Type
+data Articulation = Articulation
+    deriving stock (Eq, Show)
+
+-- | A musical note
+type Note :: Type
+data Note = Note {
+    pitch :: NotePitch,
+    duration :: NoteDuration,
+    articulations :: [Articulation]
+    } deriving stock (Eq, Show)
+
+-- | A musical rest
+type Rest :: Type
+data Rest = Rest {
+    duration :: NoteDuration,
+    articulations :: [Articulation]
+    } deriving stock (Eq, Show)
 
 -- | Musical expression
 type MusicExpr :: Type
@@ -192,8 +210,3 @@ musicExprLength (NoteExpr n) = durationLength $! n.duration
 musicExprLength (ChordExpr ns) = maximum . map (durationLength . (.duration)) $! ns
 musicExprLength (RestExpr r) = durationLength $! r.duration
 musicExprLength _ = 0
-
--- | An articulation event associated with a note or rest
-type Articulation :: Type
-data Articulation = Articulation
-    deriving stock (Eq, Show)
