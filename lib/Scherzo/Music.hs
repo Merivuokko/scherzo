@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE StrictData #-}
@@ -28,21 +29,24 @@ module Scherzo.Music (
     Articulation (..),
     staffPositionsBetween,
 
-    -- * Music expressions
-    MusicExpr (..),
-    flattenMusic,
-
     -- * Musical time calculation
     MusicLength,
-    musicExprLength,
     valueLength,
-    noteLength,
-    lengthToDuration
+    lengthToValue,
+    durationLength,
+    lengthToDuration,
+
+    -- * Music expressions
+    MusicExpr (..),
+    musicExprLength,
+    flattenMusic
     ) where
 
 import Data.Foldable (foldl')
 import Data.Kind (Type)
+import Data.Map qualified as Map
 import Data.Ratio
+import Numeric.Logarithms
 
 -- | Scientific octave number
 type Octave :: Type
@@ -68,7 +72,7 @@ data Rest = Rest {
 -- | Pitch class is a set of pitches associated with a musical scale. FOr each pitch class there is a single pitch (frequency) within each octave.
 type PitchClass :: Type
 data PitchClass = C | D | E | F | G | A | B
-                deriving stock (Eq, Enum, Ord, Show)
+                deriving stock (Bounded, Enum, Eq, Ord, Show)
 
 -- | Alternation of a pitch
 type Alteration :: Type
@@ -104,7 +108,7 @@ data NoteValue = Maxima
                | A64th
                | A128th
                | A256th
-               deriving stock (Enum, Eq, Ord, Show)
+               deriving stock (Bounded, Enum, Eq, Ord, Show)
 
 -- | Musical expression
 type MusicExpr :: Type
@@ -134,23 +138,28 @@ type MusicLength :: Type
 type MusicLength = Ratio Int
 
 valueLength :: NoteValue -> MusicLength
-valueLength v
-    = case v of
-          Maxima -> 8
-          Longa -> 4
-          Breve -> 2
-          Semibreve -> 1
-          Minim -> 1 % 2
-          Crotchet -> 1 % 4
-          Quaver -> 1 % 8
-          Semiquaver -> 1 % 16
-          A32th -> 1 % 32
-          A64th -> 1 % 64
-          A128th -> 1 % 128
-          A256th -> 1 % 256
+valueLength = \case
+    Maxima -> 8
+    Longa -> 4
+    Breve -> 2
+    Semibreve -> 1
+    Minim -> 1 % 2
+    Crotchet -> 1 % 4
+    Quaver -> 1 % 8
+    Semiquaver -> 1 % 16
+    A32th -> 1 % 32
+    A64th -> 1 % 64
+    A128th -> 1 % 128
+    A256th -> 1 % 256
 
-noteLength :: NoteDuration -> MusicLength
-noteLength nd = baseLength + baseLength * augment nd.dots
+lengthValueMap :: Map.Map MusicLength NoteValue
+lengthValueMap = Map.fromList $! fmap (\x -> (valueLength x, x)) [minBound .. ]
+
+lengthToValue :: MusicLength -> Maybe NoteValue
+lengthToValue len = Map.lookup len lengthValueMap
+
+durationLength :: NoteDuration -> MusicLength
+durationLength nd = baseLength + baseLength * augment nd.dots
   where
     baseLength :: MusicLength
     baseLength = valueLength nd.value
@@ -162,36 +171,26 @@ noteLength nd = baseLength + baseLength * augment nd.dots
         in numer % denom
 
 lengthToDuration :: MusicLength -> Maybe NoteDuration
-lengthToDuration duration
-    = let durationFloat :: Double = realToFrac duration
-          baseLength = floor (logBase 2 durationFloat)
-          filledTime = 2 ** (fromIntegral $! baseLength + 1)
-          dots = (-1) - logBase 2 ((filledTime - durationFloat) / filledTime)
-      in if isInt 10 dots
-         then Just $! NoteDuration {
-                  value = logToValue baseLength,
-                  dots = round $! dots
-                  }
-         else Nothing
-  where
-    -- logToValue works by converting the logarithmic representation to an
-    -- integer representation of the NoteValue type. Therefore the element
-    -- order in NoteValue is significant.
-    logToValue :: Int -> NoteValue
-    logToValue lg = toEnum $! (-1) * lg + 3
-
-    -- Return whether x is an integer to n decimal places
-    isInt :: RealFrac a => Int -> a -> Bool
-    isInt n x = (round (10 ^ n * (x - fromIntegral (round x :: Int))) :: Int) == 0
+lengthToDuration len
+    = let baseLen = 2 ^^ log2Floor len
+          filledTime = 2 * baseLen
+          (negDots, ord) = log2Approx ((filledTime - len) / baseLen)
+      in case (ord, lengthToValue baseLen) of
+             (EQ, Just value) ->
+                 Just $! NoteDuration {
+                     value = value,
+                     dots = (-1) * negDots
+                     }
+             _ -> Nothing
 
 -- | Calculate music expressiong length in musical time
 -- O(n)
 musicExprLength :: MusicExpr -> MusicLength
 musicExprLength (SequentialExpr xs) = foldl' (flip $! (+) . musicExprLength) 0 xs
 -- musicExprLength (SimultaneousExpr xs ) = maximum $! map musicExprLength xs
-musicExprLength (NoteExpr n) = noteLength $! n.duration
-musicExprLength (ChordExpr ns) = maximum . map (noteLength . (.duration)) $! ns
-musicExprLength (RestExpr r) = noteLength $! r.duration
+musicExprLength (NoteExpr n) = durationLength $! n.duration
+musicExprLength (ChordExpr ns) = maximum . map (durationLength . (.duration)) $! ns
+musicExprLength (RestExpr r) = durationLength $! r.duration
 musicExprLength _ = 0
 
 -- | An articulation event associated with a note or rest

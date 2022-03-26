@@ -133,6 +133,7 @@ library
         dhall ^>=1.41,
         hashable ^>=0.4,
         mtl ^>=2.2,
+        numeric-logarithms ^>=0.1,
         unordered-containers ^>=0.2.15
     exposed-modules:
         Alma.Parser,
