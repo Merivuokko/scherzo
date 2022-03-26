@@ -31,6 +31,7 @@ module Scherzo.Music (
 
     -- * Note duration
     NoteValue (..),
+    AugmentationDots,
     NoteDuration (..),
 
     -- * Expressive marks
@@ -78,7 +79,7 @@ type NotePitch :: Type
 data NotePitch = NotePitch {
     pitch :: PitchClass,
     alteration :: Alteration,
-    octave :: Octave,
+    octave :: Octave
     } deriving stock (Eq, Show)
 
 staffPositionsBetween :: NotePitch -> NotePitch -> Int
@@ -101,11 +102,15 @@ data NoteValue = Maxima
                | A256th
                deriving stock (Bounded, Enum, Eq, Ord, Show)
 
+-- | Number of augmentation dots affecting a note value
+type AugmentationDots :: Type
+type AugmentationDots = Int
+
 -- | Duration definition of a note or a rest
 type NoteDuration :: Type
 data NoteDuration = NoteDuration {
     value :: NoteValue,
-    dots :: Int
+    dots :: AugmentationDots
     } deriving stock (Eq, Show)
 
 -- | An articulation event associated with a note or rest
