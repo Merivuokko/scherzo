@@ -176,7 +176,7 @@ valueLength = \case
     A256th -> 1 % 256
 
 lengthValueMap :: Map.Map MusicLength NoteValue
-lengthValueMap = Map.fromList $! fmap (\x -> (valueLength x, x)) [minBound .. ]
+lengthValueMap = Map.fromDistinctAscList $! fmap (\x -> (valueLength x, x)) [minBound .. ]
 
 lengthToValue :: MusicLength -> Maybe NoteValue
 lengthToValue len = Map.lookup len lengthValueMap
