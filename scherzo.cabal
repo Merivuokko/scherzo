@@ -148,12 +148,12 @@ library
         Alma.Syntax.Config
     hs-source-dirs: lib
 
-executable alma2ly
+executable alma-parser
     import: common, scherzo-dep
     main-is: Main.hs
     build-depends:
         scherzo
-    hs-source-dirs: src/alma2ly
+    hs-source-dirs: src/alma-parser
 
 test-suite scherzo-test
     import: common, scherzo-dep
