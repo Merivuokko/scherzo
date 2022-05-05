@@ -1,5 +1,11 @@
 # Scherzo – a music notation language and toolbox
 
+## alma-nfa-parser
+
+This branch contains an experimental implementation of a parser for a language called Alma. The parser is configurable and is very generic. It runs a state machine which is able to parser non-deterministic finite automata. Pretty-printer is possible for rendering the syntax trees produced by this parser, but it has not been implemented.
+
+This branch and its aproach have been abandoned as the parser is not powerful enough for parsing braille notation.
+
 ## Introduction
 
 Scherzo is a set of tools for working with Western classical music notation.
