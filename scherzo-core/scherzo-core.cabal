@@ -82,6 +82,8 @@ library
         hashable ^>=1.4,
         numeric-logarithms ^>=0.1
     exposed-modules:
+        Scherzo.Music.Elementary
+        Scherzo.Music.Expr
     hs-source-dirs: src
 
 test-suite scherzo-core
