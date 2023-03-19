@@ -83,3 +83,11 @@ library
         numeric-logarithms ^>=0.1
     exposed-modules:
     hs-source-dirs: src
+
+test-suite scherzo-core
+    import: general
+    build-depends:
+        scherzo-core
+    type: exitcode-stdio-1.0
+    hs-source-dirs: test
+    main-is: Main.hs
