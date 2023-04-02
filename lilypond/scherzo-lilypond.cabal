@@ -80,6 +80,8 @@ library
     import: general
     build-depends:
         containers ^>=0.6,
+        file-io ^>=0.1.0,
+        filepath ^>=1.4.100,
         hashable ^>=1.4,
         megaparsec ^>= 9.3.0
     exposed-modules:
