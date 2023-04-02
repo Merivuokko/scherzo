@@ -85,6 +85,7 @@ library
         hashable ^>=1.4,
         megaparsec ^>= 9.3.0
     exposed-modules:
+        Scherzo.Format.LilyPond.Reader
     hs-source-dirs: src
 
 test-suite scherzo-lilypond
