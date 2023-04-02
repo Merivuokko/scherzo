@@ -19,7 +19,7 @@ tested-with: GHC == { 9.4.4 }
 source-repository head
     type: git
     location: https://github.com/Merivuokko/scherzo
-    subdir: scherzo-core
+    subdir: core
                       
 flag Werror
     description: Enable -Werror for fixing all warnings
