@@ -3,7 +3,7 @@
 -- |
 -- Module      : Scherzo.Format.LilyPond.Reader
 -- Description : LilyPond music importer for Scherzo
--- Copyright   : Copyright (C) 2023 Aura Kelloniemi
+-- Copyright   : Copyright (C) 2023-2024 Aura Kelloniemi
 -- License     : GPL-3
 -- Maintainer  : kaura.dev@sange.fi
 -- Stability   : experimental
