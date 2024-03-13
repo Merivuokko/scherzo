@@ -93,6 +93,7 @@ library
         text >=2.0 && <2.2,
     exposed-modules:
         Scherzo.Format.LilyPond.Reader
+        Scherzo.Format.LilyPond.Writer
     hs-source-dirs: src
 
 test-suite scherzo-lilypond
