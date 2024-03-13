@@ -1,0 +1,55 @@
+$-- This is a Cabal file template that is used to generate the final cabal file
+$-- for this project using the Precabal tool. Use the `autogen` script from
+$-- the project's root directory to do the generation.
+$--
+$-- This file has the same terms for use and distribution as other files
+$-- in this software. See file LICENSE for details.
+$--
+$-- The following line needs to be the first non-Precabal-style comment line
+$-- in this file due to Cabal restrictions.
+$(include-file cabal/prologue.inc)$
+
+name: scherzo-core
+version: 0.1.0.0
+synopsis: Music notation toolbox
+description:
+    Scherzo is a set of tools for working with Western classical music notation.
+
+    The plan is to support translating music between different music notation formats and to render notation as audio.
+
+    This package provides the core library used by all subpackages.
+homepage: https://github.com/Merivuokko/scherzo
+license: GPL-3.0-only
+license-file: LICENSE
+author: Aura Kelloniemi
+maintainer: kaura.dev@sange.fi
+copyright: Copyright 2023-2024 Aura Kelloniemi
+tested-with: GHC == { 9.8.2 }
+
+source-repository head
+    type: git
+    location: https://github.com/Merivuokko/scherzo
+    subdir: core
+                      
+$(include-file cabal/common.inc)$
+
+library
+    import: options
+    build-depends:
+        ${base},
+        ${containers},
+        ${hashable},
+        ${numeric-logarithms},
+        ${text},
+    exposed-modules:
+        Scherzo.Music.Elementary
+        Scherzo.Music.Expr
+    hs-source-dirs: src
+
+test-suite scherzo-core
+    import: options
+    build-depends:
+        ${base},
+    type: exitcode-stdio-1.0
+    hs-source-dirs: test
+    main-is: Main.hs
