@@ -8,11 +8,8 @@ The plan is to support translating music between different music notation format
 
 ## Status
 
-Scherzo is in very early stages of planning – let alone development.
-It cannot yet be used for anything.
-
+Scherzo is in very early stages of planning.
 All contributions (code, documentation, ideas) are very welcome.
-Contributing will become easier though once there is some basic working functionality.
 
 ## Building
 
