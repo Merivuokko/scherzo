@@ -10,10 +10,10 @@ $-- in this file due to Cabal restrictions.
 $(include-file cabal/prologue.inc)$
 
 name: scherzo-core
-version: 0.1.0.0
+version: 0.0.0.1
 synopsis: Music notation toolbox
 description:
-    Scherzo is a set of tools for working with Western classical music notation.
+    Scherzo is a set of tools for working with Western music notation.
 
     The plan is to support translating music between different music notation formats and to render notation as audio.
 

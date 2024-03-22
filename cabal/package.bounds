@@ -7,4 +7,4 @@ megaparsec >=9.5 && <9.7
 numeric-logarithms ^>=0.1
 text >=2.0 && <2.2
 
-scherzo-core ==0.1.0.0
+scherzo-core ==0.0.0.1

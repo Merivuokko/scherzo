@@ -10,7 +10,7 @@ $-- in this file due to Cabal restrictions.
 $(include-file cabal/prologue.inc)$
 
 name: scherzo-lilypond
-version: 0.1.0.0
+version: 0.0.0.1
 synopsis: LilyPond format support for Scherzo
 description:
     Scherzo is a set of tools for working with Western classical music notation.
