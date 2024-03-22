@@ -21,6 +21,9 @@ maintainer: kaura.dev@sange.fi
 copyright: Copyright 2023-2024 Aura Kelloniemi
 tested-with: GHC == { 9.4.4 }
 
+extra-doc-files:
+    ChangeLog.md
+
 source-repository head
     type: git
     location: https://github.com/Merivuokko/scherzo
