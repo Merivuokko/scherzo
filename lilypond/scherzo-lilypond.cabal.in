@@ -49,6 +49,7 @@ library
         ${filepath},
         ${hashable},
         ${megaparsec},
+        ${process},
         ${text},
     exposed-modules:
         Scherzo.Format.LilyPond.Reader
