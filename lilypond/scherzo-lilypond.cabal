@@ -23,6 +23,9 @@ tested-with: GHC == { 9.4.4 }
 
 extra-doc-files:
     ChangeLog.md
+data-files:
+    ly/sexp-export.scm
+    ly/sexp-export-init.ly
 
 source-repository head
     type: git
