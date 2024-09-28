@@ -7,7 +7,7 @@ $-- in this software. See file LICENSE for details.
 $--
 $-- NOTE: `cabal-version` directive needs to be the first content in
 $-- a Cabal file. Not even comments are allowed before that.
-cabal-version: 3.0
+cabal-version: 3.12
 
 $-- The following statement is meant to warn a user from editing the
 $-- automatically generated final Cabal file. It does not apply to this Cabal

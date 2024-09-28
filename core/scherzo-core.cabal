@@ -1,4 +1,4 @@
-cabal-version: 3.0
+cabal-version: 3.12
 
 -- This Cabal file has been automatically generated from a .cabal.in template
 -- file using Precabal and the `autogen` script from the project's root
@@ -94,6 +94,11 @@ library
     exposed-modules:
         Scherzo.Music.Elementary
         Scherzo.Music.Expr
+        Paths_scherzo_core
+        PackageInfo_scherzo_core
+    autogen-modules:
+        Paths_scherzo_core
+        PackageInfo_scherzo_core
     hs-source-dirs: src
 
 test-suite scherzo-core

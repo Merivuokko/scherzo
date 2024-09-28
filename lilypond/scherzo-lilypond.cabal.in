@@ -54,8 +54,13 @@ library
     exposed-modules:
         Scherzo.Format.LilyPond.Reader
         Scherzo.Format.LilyPond.Writer
+        Paths_scherzo_lilypond
+        PackageInfo_scherzo_lilypond
     other-modules:
         Scherzo.Format.LilyPond.Guile
+    autogen-modules:
+        Paths_scherzo_lilypond
+        PackageInfo_scherzo_lilypond
     hs-source-dirs: src
 
 executable ly2sch

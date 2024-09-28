@@ -47,6 +47,11 @@ library
     exposed-modules:
         Scherzo.Music.Elementary
         Scherzo.Music.Expr
+        Paths_scherzo_core
+        PackageInfo_scherzo_core
+    autogen-modules:
+        Paths_scherzo_core
+        PackageInfo_scherzo_core
     hs-source-dirs: src
 
 test-suite scherzo-core
