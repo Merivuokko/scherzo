@@ -105,6 +105,17 @@ library
         Scherzo.Format.LilyPond.Guile
     hs-source-dirs: src
 
+executable ly2sch
+    import: options
+    build-depends:
+        base >=4.19 && <4.21,
+        scherzo-core ==0.0.0.1,
+        scherzo-lilypond,
+        filepath >=1.5 && <1.6,
+        text >=2.0 && <2.2,
+    hs-source-dirs: src/ly2sch
+    main-is: main.hs
+
 test-suite scherzo-lilypond
     import: options
     build-depends:
