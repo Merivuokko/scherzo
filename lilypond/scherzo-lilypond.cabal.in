@@ -53,6 +53,8 @@ library
     exposed-modules:
         Scherzo.Format.LilyPond.Reader
         Scherzo.Format.LilyPond.Writer
+    other-modules:
+        Scherzo.Format.LilyPond.Guile
     hs-source-dirs: src
 
 test-suite scherzo-lilypond
