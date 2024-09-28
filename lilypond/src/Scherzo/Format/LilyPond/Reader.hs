@@ -14,6 +14,7 @@ module Scherzo.Format.LilyPond.Reader (
 
     -- * Reading from a file
     readLilyPondFile,
+    getLilyPondInitFileName,
     runLilyPondExportSexp,
     readSexp,
 ) where
@@ -27,6 +28,7 @@ import System.IO (hClose)
 import System.OsPath
 import System.Process
 
+import Paths_scherzo_lilypond qualified as P
 import Scherzo.Format.LilyPond.Guile
 import Scherzo.Music.Expr
 
@@ -39,6 +41,12 @@ readLilyPond = undefined
 -- If decoding fails, an exception is thrown.
 readLilyPondFile :: OsPath -> IO MusicExpr
 readLilyPondFile fp = readFile' fp >>= (pure $!) . readLilyPond . decodeUtf8
+
+-- | Get the name for thee required LilyPond init file (included with
+-- scherzo-lilypond).
+getLilyPondInitFileName :: IO OsPath
+getLilyPondInitFileName =
+    P.getDataFileName "ly/sexp-export-init.ly" >>= encodeFS
 
 -- | Run LilyPond with proper options to convert music into a Scheme expression
 --
