@@ -14,6 +14,8 @@ module Scherzo.Format.LilyPond.Reader (
 
     -- * Reading from a file
     readLilyPondFile,
+    runLilyPondExportSexp,
+    readSexp,
 ) where
 
 import Data.Text qualified as T
@@ -25,6 +27,7 @@ import System.IO (hClose)
 import System.OsPath
 import System.Process
 
+import Scherzo.Format.LilyPond.Guile
 import Scherzo.Music.Expr
 
 -- | Parse a LilyPond expression into MusicExpr.
