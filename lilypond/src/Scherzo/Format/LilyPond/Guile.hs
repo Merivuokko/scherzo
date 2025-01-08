@@ -40,8 +40,8 @@ data Datum
     | Number Int
     | String T.Text
     | Symbol T.Text
-    | List [Datum]
-    | DottedList [Datum] Datum
+    | -- | The Bool in the List constructor indicates whether the list is a proper list (i.e. not dotted)
+      List Bool [Datum]
     deriving stock (Eq, Show)
 
 -- | Type of our parser
@@ -91,11 +91,11 @@ parseList :: Parser Datum
 parseList = do
     void $ single '(' *> spaces
     initial <- many parseDatum
-    let proper = pure $ List initial
+    let proper = pure $ List True initial
         improper = do
             try $! single '.' *> spaces1
             final <- parseDatum
-            pure $! DottedList initial final
+            pure $! List False (initial ++ [final])
     result <- improper <|> proper
     void $! single ')' *> spaces
     pure $! result
