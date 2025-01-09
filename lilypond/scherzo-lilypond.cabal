@@ -105,6 +105,7 @@ library
         PackageInfo_scherzo_lilypond
     other-modules:
         Scherzo.Format.LilyPond.Reader.Datum
+        Scherzo.Format.LilyPond.Reader.Parser
     autogen-modules:
         Paths_scherzo_lilypond
         PackageInfo_scherzo_lilypond
