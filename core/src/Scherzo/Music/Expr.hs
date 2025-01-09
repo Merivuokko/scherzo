@@ -1,11 +1,8 @@
 -- |
--- Module      : Scherzo.Music.Expr
 -- Description : Music expressions
--- Copyright   : Copyright (C) 2023-2024 Aura Kelloniemi
--- License     : GPL-3
+-- Copyright   : © 2023 Aura Kelloniemi
+-- License     : GPL-3.0-only
 -- Maintainer  : kaura.dev@sange.fi
--- Stability   : experimental
--- Portability : GHC
 --
 -- This module defines general types and operations for describing and manipulating musical expressions.
 -- MusicExpr is a recursive type similar to an abstract syntax tree.

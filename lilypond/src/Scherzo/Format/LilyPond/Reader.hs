@@ -1,13 +1,10 @@
 -- This module provides an interface for importing music in GNU LilyPond format to Scherzo's music expressions.
 
 -- |
--- Module      : Scherzo.Format.LilyPond.Reader
 -- Description : LilyPond music importer for Scherzo
--- Copyright   : Copyright (C) 2023-2024 Aura Kelloniemi
--- License     : GPL-3
+-- Copyright   : © 2023 Aura Kelloniemi
+-- License     : GPL-3.0-only
 -- Maintainer  : kaura.dev@sange.fi
--- Stability   : experimental
--- Portability : GHC
 module Scherzo.Format.LilyPond.Reader (
     -- * Importing already loaded data
     readLilyPond,

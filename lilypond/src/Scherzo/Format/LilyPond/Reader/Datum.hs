@@ -1,11 +1,8 @@
 -- |
--- Module      : Scherzo.Format.LilyPond.Reader.Datum
 -- Description : A simplified representation of Guile s-expression
--- Copyright   : Copyright (C) 2023-2024 Aura Kelloniemi
--- License     : GPL-3
+-- Copyright   : © 2023 Aura Kelloniemi
+-- License     : GPL-3.0-only
 -- Maintainer  : kaura.dev@sange.fi
--- Stability   : experimental
--- Portability : GHC
 --
 -- This module provides a data type for representing simplified s-expresion
 -- syntax as produced by Guile's pretty-print library.

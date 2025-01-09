@@ -1,11 +1,8 @@
 -- |
--- Module      : Scherzo.Music.Elementary
 -- Description : Basic music element definitions
--- Copyright   : Copyright (C) 2023-2024 Aura Kelloniemi
--- License     : GPL-3
+-- Copyright   : © 2023 Aura Kelloniemi
+-- License     : GPL-3.0-only
 -- Maintainer  : kaura.dev@sange.fi
--- Stability   : experimental
--- Portability : GHC
 --
 -- This module defines elementary components of musical notation:
 -- note pitches, values, octaves, etc. and utility functions for working with them.
