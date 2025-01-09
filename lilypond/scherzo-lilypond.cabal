@@ -89,13 +89,13 @@ common options
 library
     import: options
     build-depends:
-        base >=4.19 && <4.21,
+        base >=4.19 && <4.22,
         scherzo-core ==0.0.0.1,
         containers >=0.7 && <0.8,
         file-io ^>=0.1.0.1,
         filepath >=1.5 && <1.6,
         hashable ^>=1.5,
-        megaparsec >=9.6 && <9.7,
+        megaparsec >=9.6 && <9.8,
         process ^>=1.6.24,
         text >=2.0 && <2.2,
     exposed-modules:
@@ -113,7 +113,7 @@ library
 executable ly2sch
     import: options
     build-depends:
-        base >=4.19 && <4.21,
+        base >=4.19 && <4.22,
         scherzo-core ==0.0.0.1,
         scherzo-lilypond,
         filepath >=1.5 && <1.6,
@@ -124,7 +124,7 @@ executable ly2sch
 test-suite scherzo-lilypond
     import: options
     build-depends:
-        base >=4.19 && <4.21,
+        base >=4.19 && <4.22,
     type: exitcode-stdio-1.0
     hs-source-dirs: test
     main-is: Main.hs

@@ -86,7 +86,7 @@ common options
 library
     import: options
     build-depends:
-        base >=4.19 && <4.21,
+        base >=4.19 && <4.22,
         containers >=0.7 && <0.8,
         hashable ^>=1.5,
         numeric-logarithms ^>=0.1,
@@ -104,7 +104,7 @@ library
 test-suite scherzo-core
     import: options
     build-depends:
-        base >=4.19 && <4.21,
+        base >=4.19 && <4.22,
     type: exitcode-stdio-1.0
     hs-source-dirs: test
     main-is: Main.hs
