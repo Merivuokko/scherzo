@@ -29,7 +29,8 @@ import System.OsPath
 import System.Process
 
 import Paths_scherzo_lilypond qualified as P
-import Scherzo.Format.LilyPond.Guile
+import Scherzo.Format.LilyPond.Reader.Datum
+import Scherzo.Format.LilyPond.Reader.Parser
 import Scherzo.Music.Expr
 
 -- | Parse a LilyPond expression into MusicExpr.
