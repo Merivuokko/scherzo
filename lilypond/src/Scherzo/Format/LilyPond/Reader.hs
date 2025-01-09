@@ -16,6 +16,9 @@ module Scherzo.Format.LilyPond.Reader (
     readLilyPondFile,
     getLilyPondInitFileName,
     runLilyPondExportSexp,
+
+    -- * Sexp parsing
+    Datum (..),
     readSexp,
 ) where
 
