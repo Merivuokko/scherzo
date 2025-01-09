@@ -1,6 +1,6 @@
 -- |
--- Module      : Scherzo.Format.LilyPond.Guile
--- Description : A simple parser for basic Guile s-expressions
+-- Module      : Scherzo.Format.LilyPond.Reader.Parser
+-- Description : A parser for basic Guile s-expressions
 -- Copyright   : Copyright (C) 2023-2024 Aura Kelloniemi
 -- License     : GPL-3
 -- Maintainer  : kaura.dev@sange.fi
@@ -10,16 +10,10 @@
 -- This module provides a parser for simplified s-expresion syntax as produced
 -- by Guile's pretty-print library.
 --
--- Data in this format is exported from within LilyPond using our sexp-export
--- library.
---
 -- This is not a complete Guile or Scheme parser. It understands the minimum
 -- required subset of Guile's s-expression syntax that is needed to import
 -- LilyPond music to Scherzo.
-module Scherzo.Format.LilyPond.Guile (
-    -- * Scheme data representation
-    Datum (..),
-
+module Scherzo.Format.LilyPond.Reader.Parser (
     -- * Parsing
     readSexp,
 ) where
@@ -33,16 +27,7 @@ import Data.Text.Read qualified as T
 import Data.Void (Void)
 import Text.Megaparsec
 
--- | A basic scheme value
-data Datum
-    = Bool Bool
-    | Char Char
-    | Number Int
-    | String T.Text
-    | Symbol T.Text
-    | -- | The Bool in the List constructor indicates whether the list is a proper list (i.e. not dotted)
-      List Bool [Datum]
-    deriving stock (Eq, Show)
+import Scherzo.Format.LilyPond.Reader.Datum
 
 -- | Type of our parser
 type Parser = Parsec Void T.Text
