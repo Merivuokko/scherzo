@@ -1,16 +1,17 @@
+-- This module provides facilities for exporting Scherzo music expressions to
+-- GNU LilyPond format.
+
 -- |
 -- Description : LilyPond music export routines for Scherzo
 -- Copyright   : © 2023 Aura Kelloniemi
 -- License     : GPL-3.0-only
 -- Maintainer  : kaura.dev@sange.fi
-
--- This module provides facilities for exporting Scherzo music expressions to
--- GNU LilyPond format.
 module Scherzo.Format.LilyPond.Writer (
     musicToLilyPond,
 ) where
 
 import Data.Text qualified as T
+import Data.Vector.Strict qualified as V
 
 import Scherzo.Music.Elementary
 import Scherzo.Music.Expr
@@ -42,11 +43,11 @@ musicToLilyPond :: MusicExpr -> T.Text
 musicToLilyPond = T.unwords . go . flattenMusic
   where
     go :: MusicExpr -> [T.Text]
-    go (SequentialExpr xs) = [ "{", T.unwords (fmap (T.unwords . go) xs), "}" ]
-    go (SimultaneousExpr xs) = [ "<<", T.unwords (fmap (T.unwords . go) xs), ">>" ]
+    go (SequentialExpr xs) = ["{", T.unwords (fmap (T.unwords . go) $ V.toList xs), "}"]
+    go (SimultaneousExpr xs) = ["<<", T.unwords (fmap (T.unwords . go) $ V.toList xs), ">>"]
     go (NoteExpr note) = [noteToLilyPond note]
     go (RestExpr rest) = [restToLilyPond rest]
-    go BarExpr = [ "|" ]
+    go BarExpr = ["|"]
 
 noteToLilyPond :: Note -> T.Text
 noteToLilyPond note = pitches note.pitches <> durationToLilyPond note.duration
@@ -62,10 +63,11 @@ noteToLilyPond note = pitches note.pitches <> durationToLilyPond note.duration
     notePitch :: NotePitch -> T.Text
     notePitch p = pitchNameToLilyPond p.name <> alteration p.alteration <> octaveToLilyPond p.octave
 
-    pitches :: [NotePitch] -> T.Text
-    pitches [pitch] = notePitch pitch
-    pitches [] = "<>"
-    pitches ps = "<" <> T.unwords (map notePitch ps) <> ">"
+    pitches :: V.Vector NotePitch -> T.Text
+    pitches ps = case V.length ps of
+        0 -> "<>"
+        1 -> notePitch . V.unsafeHead $! ps
+        _ -> "<" <> (T.unwords . V.toList . fmap notePitch $! ps) <> ">"
 
 octaveToLilyPond :: Octave -> T.Text
 octaveToLilyPond oct

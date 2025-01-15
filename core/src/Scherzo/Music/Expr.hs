@@ -6,54 +6,54 @@
 --
 -- This module defines general types and operations for describing and manipulating musical expressions.
 -- MusicExpr is a recursive type similar to an abstract syntax tree.
+module Scherzo.Music.Expr (
+    -- * Music expressions
+    MusicExpr (..),
+    flattenMusic,
 
-module Scherzo.Music.Expr
-    (
-        -- * Music expressions
-        MusicExpr (..),
-        flattenMusic,
-
-        -- * Musical time calculation
-        musicExprLength,
-    ) where
+    -- * Musical time calculation
+    musicExprLength,
+) where
 
 import Data.Foldable (foldl')
 import Data.Hashable
+import Data.Vector.Strict qualified as V
 import GHC.Generics (Generic)
 
 import Scherzo.Music.Elementary
 
 -- | Musical expression
 data MusicExpr
-    -- | Sequentially progressing music
-    = SequentialExpr [MusicExpr]
-    -- | Simultaneously sounding music
-    | SimultaneousExpr [MusicExpr]
-    -- | A single note
-    | NoteExpr Note
-    -- | A rest
-    | RestExpr Rest
-    -- | A barline
-    | BarExpr
+    = -- | Sequentially progressing music
+      SequentialExpr (V.Vector MusicExpr)
+    | -- | Simultaneously sounding music
+      SimultaneousExpr (V.Vector MusicExpr)
+    | -- | A single note
+      NoteExpr Note
+    | -- | A rest
+      RestExpr Rest
+    | -- | A barline
+      BarExpr
     deriving stock (Eq, Generic, Show)
-    deriving anyclass Hashable
+    deriving anyclass (Hashable)
 
 -- | Remove unnecessary nesting from a music expression
 flattenMusic :: MusicExpr -> MusicExpr
 flattenMusic (SequentialExpr ms) = SequentialExpr $! unseq ms
   where
-    unseq :: [MusicExpr] -> [MusicExpr]
-    unseq [] = []
-    unseq ((SequentialExpr x) : xs) = unseq x <> unseq xs
-    unseq (x : xs) = x : unseq xs
+    unseq :: V.Vector MusicExpr -> V.Vector MusicExpr
+    unseq sx = case V.uncons sx of
+        Nothing -> V.empty
+        Just ((SequentialExpr hd), tl) -> unseq hd <> unseq tl
+        Just (hd, tl) -> V.cons hd $ unseq tl
 flattenMusic ms = ms
 
--- | Calculate music expressiong length in musical time
+-- | Calculate music expression length in musical time
 -- O(n)
 musicExprLength :: MusicExpr -> MusicLength
 musicExprLength = \case
     SequentialExpr xs -> foldl' (flip $! (+) . musicExprLength) 0 xs
-    SimultaneousExpr xs -> maximum $! fmap musicExprLength xs
+    SimultaneousExpr xs -> V.maximum $! fmap musicExprLength xs
     NoteExpr n -> durationLength $! n.duration
     RestExpr r -> durationLength $! r.duration
     BarExpr -> 0

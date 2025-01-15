@@ -51,6 +51,7 @@ library
         ${megaparsec},
         ${process},
         ${text},
+        ${vector},
     exposed-modules:
         Scherzo.Format.LilyPond.Reader
         Scherzo.Format.LilyPond.Writer

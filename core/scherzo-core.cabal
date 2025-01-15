@@ -91,6 +91,7 @@ library
         hashable ^>=1.5,
         numeric-logarithms ^>=0.1,
         text >=2.0 && <2.2,
+        vector ^>=0.13.2.0,
     exposed-modules:
         Scherzo.Music.Elementary
         Scherzo.Music.Expr

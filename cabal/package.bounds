@@ -7,5 +7,6 @@ megaparsec >=9.6 && <9.8
 numeric-logarithms ^>=0.1
 process ^>=1.6.24
 text >=2.0 && <2.2
+vector ^>=0.13.2.0
 
 scherzo-core ==0.0.0.1

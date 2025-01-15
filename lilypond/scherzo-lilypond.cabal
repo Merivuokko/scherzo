@@ -98,6 +98,7 @@ library
         megaparsec >=9.6 && <9.8,
         process ^>=1.6.24,
         text >=2.0 && <2.2,
+        vector ^>=0.13.2.0,
     exposed-modules:
         Scherzo.Format.LilyPond.Reader
         Scherzo.Format.LilyPond.Writer
