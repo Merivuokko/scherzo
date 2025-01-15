@@ -19,11 +19,9 @@ module Scherzo.Format.LilyPond.Reader (
     readSexp,
 ) where
 
-import Data.Text qualified as T
-import Data.Text.Encoding
 import Data.Text.IO qualified as T
 import System.Exit (ExitCode)
-import System.File.OsPath
+import System.File.OsPath qualified as OsP
 import System.IO (hClose)
 import System.OsPath
 import System.Process
@@ -34,14 +32,14 @@ import Scherzo.Format.LilyPond.Reader.Parser
 import Scherzo.Music.Expr
 
 -- | Parse a LilyPond expression into MusicExpr.
-readLilyPond :: T.Text -> MusicExpr
+readLilyPond :: Text -> MusicExpr
 readLilyPond = undefined
 
 -- | Read LilyPond expressions from a file, parse it and return as a MusicExpr.
 -- The file is assumed to contain UTF-8 encoded text.
 -- If decoding fails, an exception is thrown.
 readLilyPondFile :: OsPath -> IO MusicExpr
-readLilyPondFile fp = readFile' fp >>= (pure $!) . readLilyPond . decodeUtf8
+readLilyPondFile fp = OsP.readFile' fp >>= (pure $!) . readLilyPond . decodeUtf8
 
 -- | Get the name for thee required LilyPond init file (included with
 -- scherzo-lilypond).
@@ -55,15 +53,15 @@ getLilyPondInitFileName =
 runLilyPondExportSexp
     :: OsPath
     -- ^ Path to the needed init file
-    -> T.Text
+    -> Text
     -- ^ Music in LilyPond format
-    -> IO (ExitCode, T.Text, T.Text)
+    -> IO (ExitCode, Text, Text)
 runLilyPondExportSexp initFp input = do
     initString <- decodeFS initFp
-    (stdin, stdout, stderr, ph) <- runInteractiveProcess "lilypond" ["--init", initString, "--loglevel=WARNING", "-"] Nothing Nothing
-    T.hPutStr stdin input
-    hClose stdin
-    outText <- T.hGetContents stdout
-    errText <- T.hGetContents stderr
-    status <- waitForProcess ph
-    pure $! (status, outText, errText)
+    (stdinHandle, stdoutHandle, stderrHandle, procHandle) <- runInteractiveProcess "lilypond" ["--init", initString, "--loglevel=WARNING", "-"] Nothing Nothing
+    T.hPutStr stdinHandle input
+    hClose stdinHandle
+    outText <- T.hGetContents stdoutHandle
+    errText <- T.hGetContents stderrHandle
+    status <- waitForProcess procHandle
+    pure (status, outText, errText)

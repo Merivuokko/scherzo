@@ -42,15 +42,12 @@ $(include-file cabal/common.inc)$
 library
     import: options
     build-depends:
-        ${base},
         ${scherzo-core},
-        ${containers},
+        ${scherzo-prelude},
         ${file-io},
         ${filepath},
-        ${hashable},
         ${megaparsec},
         ${process},
-        ${text},
         ${vector},
     exposed-modules:
         Scherzo.Format.LilyPond.Reader
@@ -68,11 +65,10 @@ library
 executable ly2sch
     import: options
     build-depends:
-        ${base},
+        ${scherzo-prelude},
         ${scherzo-core},
         scherzo-lilypond,
         ${filepath},
-        ${text},
     hs-source-dirs: src/ly2sch
     main-is: main.hs
 

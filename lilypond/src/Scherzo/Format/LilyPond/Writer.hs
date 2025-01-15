@@ -16,13 +16,13 @@ import Data.Vector.Strict qualified as V
 import Scherzo.Music.Elementary
 import Scherzo.Music.Expr
 
-durationToLilyPond :: NoteDuration -> T.Text
+durationToLilyPond :: NoteDuration -> Text
 durationToLilyPond duration = value duration.value <> dots duration.dots
   where
-    dots :: Int -> T.Text
+    dots :: Int -> Text
     dots = flip T.replicate "."
 
-    value :: NoteValue -> T.Text
+    value :: NoteValue -> Text
     value = \case
         Maxima -> "\\maxima"
         Longa -> "\\longa"
@@ -39,20 +39,20 @@ durationToLilyPond duration = value duration.value <> dots duration.dots
         A512th -> "512"
         A1024th -> "1024"
 
-musicToLilyPond :: MusicExpr -> T.Text
-musicToLilyPond = T.unwords . go . flattenMusic
+musicToLilyPond :: MusicExpr -> Text
+musicToLilyPond = unwords . go . flattenMusic
   where
-    go :: MusicExpr -> [T.Text]
-    go (SequentialExpr xs) = ["{", T.unwords (fmap (T.unwords . go) $ V.toList xs), "}"]
-    go (SimultaneousExpr xs) = ["<<", T.unwords (fmap (T.unwords . go) $ V.toList xs), ">>"]
+    go :: MusicExpr -> [Text]
+    go (SequentialExpr xs) = ["{", unwords (unwords . go <$> V.toList xs), "}"]
+    go (SimultaneousExpr xs) = ["<<", unwords (unwords . go <$> V.toList xs), ">>"]
     go (NoteExpr note) = [noteToLilyPond note]
     go (RestExpr rest) = [restToLilyPond rest]
     go BarExpr = ["|"]
 
-noteToLilyPond :: Note -> T.Text
+noteToLilyPond :: Note -> Text
 noteToLilyPond note = pitches note.pitches <> durationToLilyPond note.duration
   where
-    alteration :: Alteration -> T.Text
+    alteration :: Alteration -> Text
     alteration = \case
         DoubleFlat -> "eses"
         Flat -> "es"
@@ -60,22 +60,22 @@ noteToLilyPond note = pitches note.pitches <> durationToLilyPond note.duration
         Sharp -> "is"
         DoubleSharp -> "isis"
 
-    notePitch :: NotePitch -> T.Text
+    notePitch :: NotePitch -> Text
     notePitch p = pitchNameToLilyPond p.name <> alteration p.alteration <> octaveToLilyPond p.octave
 
-    pitches :: V.Vector NotePitch -> T.Text
+    pitches :: Vector NotePitch -> Text
     pitches ps = case V.length ps of
         0 -> "<>"
         1 -> notePitch . V.unsafeHead $! ps
-        _ -> "<" <> (T.unwords . V.toList . fmap notePitch $! ps) <> ">"
+        _ -> "<" <> (unwords . V.toList . fmap notePitch $! ps) <> ">"
 
-octaveToLilyPond :: Octave -> T.Text
+octaveToLilyPond :: Octave -> Text
 octaveToLilyPond oct
     | oct == 3 = ""
     | oct > 3 = T.replicate (oct - 3) "'"
     | otherwise = T.replicate (3 - oct) ","
 
-pitchNameToLilyPond :: PitchName -> T.Text
+pitchNameToLilyPond :: PitchName -> Text
 pitchNameToLilyPond = \case
     C -> "c"
     D -> "d"
@@ -85,10 +85,10 @@ pitchNameToLilyPond = \case
     A -> "a"
     B -> "b"
 
-restToLilyPond :: Rest -> T.Text
+restToLilyPond :: Rest -> Text
 restToLilyPond rest = restType rest.restType <> durationToLilyPond rest.duration
   where
-    restType :: RestType -> T.Text
+    restType :: RestType -> Text
     restType = \case
         NormalRest maybePitch ->
             case maybePitch of

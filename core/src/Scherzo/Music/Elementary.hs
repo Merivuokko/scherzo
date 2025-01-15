@@ -35,9 +35,6 @@ module Scherzo.Music.Elementary (
     lengthToDuration,
 ) where
 
-import Data.Hashable
-import Data.Vector.Strict qualified as V
-import GHC.Generics (Generic)
 import GHC.Real (Ratio (..), (%))
 import Numeric.Logarithms
 
@@ -138,9 +135,9 @@ data Articulation = Articulation
 -- | A single musical note or a chord.
 -- It defines a single-pithced note with duration or a chord with multiple tones, but each with the same duration.
 data Note = Note
-    { pitches :: V.Vector NotePitch,
+    { pitches :: Vector NotePitch,
       duration :: NoteDuration,
-      articulations :: V.Vector Articulation
+      articulations :: Vector Articulation
     }
     deriving stock (Eq, Generic, Show)
     deriving anyclass (Hashable)
@@ -160,7 +157,7 @@ data RestType
 data Rest = Rest
     { restType :: RestType,
       duration :: NoteDuration,
-      articulations :: V.Vector Articulation
+      articulations :: Vector Articulation
     }
     deriving stock (Eq, Generic, Show)
     deriving anyclass (Hashable)
@@ -227,8 +224,8 @@ lengthToDuration :: MusicLength -> Maybe NoteDuration
 lengthToDuration len =
     let baseLen = 2 ^^ log2Floor len
         filledTime = 2 * baseLen
-        (negDots, ord) = log2Approx ((filledTime - len) / baseLen)
-    in  case (ord, lengthToValue baseLen) of
+        (negDots, rel) = log2Approx ((filledTime - len) / baseLen)
+    in  case (rel, lengthToValue baseLen) of
             (EQ, Just value) ->
                 Just $!
                     NoteDuration

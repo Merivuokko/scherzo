@@ -86,18 +86,20 @@ common options
     else
         ghc-options: -Wall -Wcompat
 
+    mixins: base hiding (Prelude)
+    build-depends:
+        base >=4.20 && <4.22,
+        relude ^>=1.2.2.0,
+
 library
     import: options
     build-depends:
-        base >=4.19 && <4.22,
         scherzo-core ==0.0.0.1,
-        containers >=0.7 && <0.8,
+        scherzo-prelude ==0.0.0.1,
         file-io ^>=0.1.0.1,
         filepath >=1.5 && <1.6,
-        hashable ^>=1.5,
         megaparsec >=9.6 && <9.8,
         process ^>=1.6.24,
-        text >=2.0 && <2.2,
         vector ^>=0.13.2.0,
     exposed-modules:
         Scherzo.Format.LilyPond.Reader
@@ -115,18 +117,17 @@ library
 executable ly2sch
     import: options
     build-depends:
-        base >=4.19 && <4.22,
+        scherzo-prelude ==0.0.0.1,
         scherzo-core ==0.0.0.1,
         scherzo-lilypond,
         filepath >=1.5 && <1.6,
-        text >=2.0 && <2.2,
     hs-source-dirs: src/ly2sch
     main-is: main.hs
 
 test-suite scherzo-lilypond
     import: options
     build-depends:
-        base >=4.19 && <4.22,
+        base >=4.20 && <4.22,
     type: exitcode-stdio-1.0
     hs-source-dirs: test
     main-is: Main.hs

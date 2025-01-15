@@ -83,14 +83,17 @@ common options
     else
         ghc-options: -Wall -Wcompat
 
+    mixins: base hiding (Prelude)
+    build-depends:
+        base >=4.20 && <4.22,
+        relude ^>=1.2.2.0,
+
 library
     import: options
     build-depends:
-        base >=4.19 && <4.22,
-        containers >=0.7 && <0.8,
-        hashable ^>=1.5,
+        scherzo-prelude ==0.0.0.1,
+        hashable ^>=1.5.0.0,
         numeric-logarithms ^>=0.1,
-        text >=2.0 && <2.2,
         vector ^>=0.13.2.0,
     exposed-modules:
         Scherzo.Music.Elementary
@@ -105,7 +108,7 @@ library
 test-suite scherzo-core
     import: options
     build-depends:
-        base >=4.19 && <4.22,
+        scherzo-prelude ==0.0.0.1,
     type: exitcode-stdio-1.0
     hs-source-dirs: test
     main-is: Main.hs

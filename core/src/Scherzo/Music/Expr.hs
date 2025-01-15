@@ -15,19 +15,16 @@ module Scherzo.Music.Expr (
     musicExprLength,
 ) where
 
-import Data.Foldable (foldl')
-import Data.Hashable
 import Data.Vector.Strict qualified as V
-import GHC.Generics (Generic)
 
 import Scherzo.Music.Elementary
 
 -- | Musical expression
 data MusicExpr
     = -- | Sequentially progressing music
-      SequentialExpr (V.Vector MusicExpr)
+      SequentialExpr (Vector MusicExpr)
     | -- | Simultaneously sounding music
-      SimultaneousExpr (V.Vector MusicExpr)
+      SimultaneousExpr (Vector MusicExpr)
     | -- | A single note
       NoteExpr Note
     | -- | A rest
@@ -41,10 +38,10 @@ data MusicExpr
 flattenMusic :: MusicExpr -> MusicExpr
 flattenMusic (SequentialExpr ms) = SequentialExpr $! unseq ms
   where
-    unseq :: V.Vector MusicExpr -> V.Vector MusicExpr
+    unseq :: Vector MusicExpr -> Vector MusicExpr
     unseq sx = case V.uncons sx of
         Nothing -> V.empty
-        Just ((SequentialExpr hd), tl) -> unseq hd <> unseq tl
+        Just (SequentialExpr hd, tl) -> unseq hd <> unseq tl
         Just (hd, tl) -> V.cons hd $ unseq tl
 flattenMusic ms = ms
 

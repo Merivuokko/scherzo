@@ -15,28 +15,28 @@ module Scherzo.Format.LilyPond.Reader.Parser (
     readSexp,
 ) where
 
+import Prelude hiding (many)
+
 import Data.Char (isDigit)
-import Data.Functor (void)
 import Data.Map.Strict qualified as M
 import Data.Set qualified as S
 import Data.Text qualified as T
 import Data.Text.Read qualified as T
-import Data.Void (Void)
 import Text.Megaparsec
 
 import Scherzo.Format.LilyPond.Reader.Datum
 
 -- | Type of our parser
-type Parser = Parsec Void T.Text
+type Parser = Parsec Void Text
 
 -- | Parse a Scheme expression
 readSexp
-    :: T.Text
+    :: Text
     -- ^ Input text
-    -> Either T.Text Datum
+    -> Either Text Datum
 readSexp input =
     case runParser parseDatum "<scheme>" input of
-        Left err -> Left . T.pack . errorBundlePretty $ err
+        Left err -> Left . toText . errorBundlePretty $ err
         Right result -> Right result
 
 -- | Parse a basic or compound datum
@@ -50,7 +50,7 @@ parseDatum =
 
 parseNumber :: Parser Datum
 parseNumber = do
-    (text, _) <- try $ match ((optional $ single '+' <|> single '-') *> parseSeparated (takeWhile1P (Just "digits") isDigit))
+    (text, _) <- try $ match (optional (single '+' <|> single '-') *> parseSeparated (takeWhile1P (Just "digits") isDigit))
     void $! spaces
     case T.signed T.decimal text of
         Left err -> fail $ "Error while reading a number: " <> err
@@ -104,8 +104,8 @@ parseChar = do
     void $! spaces
     if
         | T.length text == 1 -> pure $! Char $! T.head text
-        | text == "newline" -> pure $! Char $! '\n'
-        | otherwise -> fail $ "Unsupported character literal: #\\" <> T.unpack text
+        | text == "newline" -> pure $! Char '\n'
+        | otherwise -> fail $ "Unsupported character literal: #\\" <> toString text
 
 -- | Parse a string
 parseString :: Parser Datum
@@ -116,22 +116,22 @@ parseString = label "string" do
     pure $! String $! T.concat texts
 
 -- | Parse a string element
-parseStringElement :: Parser T.Text
+parseStringElement :: Parser Text
 parseStringElement = literalText <|> escapeSequence
   where
-    literalText :: Parser T.Text
+    literalText :: Parser Text
     literalText = takeWhile1P (Just "literal text") (\ch -> not $! ch `T.elem` "\"\\")
 
-    escapeSequence :: Parser T.Text
+    escapeSequence :: Parser Text
     escapeSequence = label "escape sequence" do
         void $! single '\\'
         ch <- anySingle
         case M.lookup ch escapableCharsMap of
             Just replacement -> pure $! replacement
-            Nothing -> fail $ "Unknown escape ssequence in string: \\" <> (show ch)
+            Nothing -> fail $ "Unknown escape ssequence in string: \\" <> show ch
 
 -- | A mapping from escapable characters to the values they represent
-escapableCharsMap :: M.Map Char T.Text
+escapableCharsMap :: M.Map Char Text
 escapableCharsMap =
     M.fromList
         [ ('n', "\n"),
@@ -149,7 +149,7 @@ isSeparator sep = sep <= ' ' || S.member sep separators
 -- | Parse a separator and return it wrapped in Maybe. If the separator is
 -- EOF, return Nothing.
 parseSeparator :: Parser (Maybe Char)
-parseSeparator = eof *> pure Nothing <|> fmap Just (satisfy isSeparator)
+parseSeparator = eof $> Nothing <|> fmap Just (satisfy isSeparator)
 
 -- | Parse a token separated by a separator from the rest of the input. The separator is not consumed.
 parseSeparated :: Parser a -> Parser a

@@ -14,15 +14,13 @@ module Scherzo.Format.LilyPond.Reader.Datum (
     Datum (..),
 ) where
 
-import Data.Text qualified as T
-
 -- | A basic scheme value
 data Datum
     = Bool Bool
     | Char Char
     | Number Int
-    | String T.Text
-    | Symbol T.Text
+    | String Text
+    | Symbol Text
     | -- | The Bool in the List constructor indicates whether the list is a proper list (i.e. not dotted)
       List Bool [Datum]
     deriving stock (Eq, Show)

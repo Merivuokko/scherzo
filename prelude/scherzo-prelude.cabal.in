@@ -9,22 +9,20 @@ $-- The following line needs to be the first non-Precabal-style comment line
 $-- in this file due to Cabal restrictions.
 $(include-file cabal/prologue.inc)$
 
-name: scherzo-core
+name: scherzo-prelude
 version: 0.0.0.1
-synopsis: Music notation toolbox
+synopsis: Prelude replacement for Scherzo—the music notation toolbox
 description:
     Scherzo is a set of tools for working with Western music notation.
 
-    The plan is to support translating music between different music notation formats and to render notation as audio.
-
-    This package provides the core library used by all subpackages.
+    This package provides the prelude replacement used by Scherzo packages.
 homepage: https://github.com/Merivuokko/scherzo
 license: GPL-3.0-only
 license-file: LICENSE
 author: Aura Kelloniemi
 maintainer: kaura.dev@sange.fi
-copyright: Copyright 2023-2024 Aura Kelloniemi
-tested-with: GHC == { 9.8.2 }
+copyright: Copyright 2024 Aura Kelloniemi
+tested-with: GHC == { 9.10.1 }
 
 extra-doc-files:
     ChangeLog.md
@@ -32,31 +30,15 @@ extra-doc-files:
 source-repository head
     type: git
     location: https://github.com/Merivuokko/scherzo
-    subdir: core
+    subdir: prelude
                       
 $(include-file cabal/common.inc)$
 
 library
     import: options
     build-depends:
-        ${scherzo-prelude},
         ${hashable},
-        ${numeric-logarithms},
         ${vector},
     exposed-modules:
-        Scherzo.Music.Elementary
-        Scherzo.Music.Expr
-        Paths_scherzo_core
-        PackageInfo_scherzo_core
-    autogen-modules:
-        Paths_scherzo_core
-        PackageInfo_scherzo_core
-    hs-source-dirs: src
-
-test-suite scherzo-core
-    import: options
-    build-depends:
-        ${scherzo-prelude},
-    type: exitcode-stdio-1.0
-    hs-source-dirs: test
-    main-is: Main.hs
+        Prelude
+    hs-source-dirs: .
