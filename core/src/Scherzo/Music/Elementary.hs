@@ -41,8 +41,6 @@ import GHC.Real (Ratio (..), (%))
 import Numeric.Logarithms
 
 -- | Pitch name refers to a pitch of a note within one octave.
--- This is terminology most commonly used in tonal music.
--- Set theory talks about pitch classes.
 -- English note names are used in scherzo.
 data PitchName
     = C
@@ -81,6 +79,7 @@ data NotePitch = NotePitch
 -- | Count the number of staff positions between two pitches.
 -- This is a limited view of an interval.
 -- 0 = prime, 1 = second, 2 = third, etc.
+-- The result can be negative.
 staffPositionsBetween :: NotePitch -> NotePitch -> Int
 staffPositionsBetween a b =
     (a.octave * 7 + fromEnum a.name) - (b.octave * 7 + fromEnum b.name)
@@ -188,6 +187,7 @@ valueLength = \case
 
 -- | If possible, determine the note value from its length.
 -- If the length is not representable by a basic note value, Nothing is returned.
+-- NOTE: The given length needs to be in normal form.
 lengthToValue :: MusicLength -> Maybe NoteValue
 lengthToValue = \case
     -- Beware that the (:%) constructor does not reduce fractions, and thus the numbers below need to be in their most reduced form.
@@ -220,7 +220,7 @@ durationLength nd = baseLength + baseLength * augment nd.dots
             !numer = denom - 1
         in  numer % denom
 
--- | If possible, determine the duration of a single note given its length.
+-- | Determine the duration of a single note given its length.
 -- If the given length does not represent a duration expressible with note values and augmentation dots, return Nothing.
 lengthToDuration :: MusicLength -> Maybe NoteDuration
 lengthToDuration len =
