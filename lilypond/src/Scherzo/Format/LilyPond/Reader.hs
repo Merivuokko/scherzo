@@ -21,7 +21,6 @@ module Scherzo.Format.LilyPond.Reader (
 
 import Data.ByteString qualified as BS
 import System.Exit (ExitCode)
-import System.File.OsPath qualified as OsP
 import System.IO (hClose)
 import System.OsPath
 import System.Process
@@ -39,7 +38,7 @@ readLilyPond = undefined
 -- The file is assumed to contain UTF-8 encoded text.
 -- If decoding fails, an exception is thrown.
 readLilyPondFile :: OsPath -> IO MusicExpr
-readLilyPondFile fp = OsP.readFile' fp >>= (pure $!) . readLilyPond . decodeUtf8
+readLilyPondFile _fp = undefined
 
 -- | Get the name for thee required LilyPond init file (included with
 -- scherzo-lilypond).
