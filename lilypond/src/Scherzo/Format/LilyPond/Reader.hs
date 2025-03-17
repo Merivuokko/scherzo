@@ -19,7 +19,7 @@ module Scherzo.Format.LilyPond.Reader (
     readSexp,
 ) where
 
-import Data.Text.IO qualified as T
+import Data.ByteString qualified as BS
 import System.Exit (ExitCode)
 import System.File.OsPath qualified as OsP
 import System.IO (hClose)
@@ -53,15 +53,20 @@ getLilyPondInitFileName =
 runLilyPondExportSexp
     :: OsPath
     -- ^ Path to the needed init file
-    -> Text
-    -- ^ Music in LilyPond format
+    -> Either OsPath Text
+    -- ^ Either a LilyPond score file name or music in LilyPond format
     -> IO (ExitCode, Text, Text)
 runLilyPondExportSexp initFp input = do
-    initString <- decodeFS initFp
-    (stdinHandle, stdoutHandle, stderrHandle, procHandle) <- runInteractiveProcess "lilypond" ["--init", initString, "--loglevel=WARNING", "-"] Nothing Nothing
-    T.hPutStr stdinHandle input
+    initPathString <- decodeFS initFp
+    (musicPathString, musicText) <- case input of
+        Left path -> do
+            pathS <- decodeFS path
+            pure (pathS, "")
+        Right text -> pure ("-", text)
+    (stdinHandle, stdoutHandle, stderrHandle, procHandle) <- runInteractiveProcess "lilypond" ["--init", initPathString, "--loglevel=WARNING", musicPathString] Nothing Nothing
+    BS.hPut stdinHandle (encodeUtf8 musicText)
     hClose stdinHandle
-    outText <- T.hGetContents stdoutHandle
-    errText <- T.hGetContents stderrHandle
+    outText <- decodeUtf8 <$> BS.hGetContents stdoutHandle
+    errText <- decodeUtf8 <$> BS.hGetContents stderrHandle
     status <- waitForProcess procHandle
     pure (status, outText, errText)
