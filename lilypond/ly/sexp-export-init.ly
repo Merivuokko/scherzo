@@ -19,4 +19,6 @@
   #f)
 
 %% Include original init file
-\include "init.ly"
+$(ly:parser-include-string
+  (format #f "\\include \"~a\""
+   (string-append (ly:effective-prefix) "/ly/init.ly")))
