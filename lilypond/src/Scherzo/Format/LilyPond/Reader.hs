@@ -48,7 +48,7 @@ getLilyPondInitFileName =
 
 -- | Run LilyPond with proper options to convert music into a Scheme expression
 --
--- Returns the LilyPond processe's exit code, stdout and stderr.
+-- Returns the LilyPond process's exit code, stdout and stderr.
 runLilyPondExportSexp
     :: OsPath
     -- ^ Path to the needed init file
